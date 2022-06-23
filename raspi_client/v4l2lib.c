@@ -30,9 +30,9 @@ static int xioctl(int fd, int request, void *arg)
 int init_v4l2(int* fd, uint8_t *buf)
 {
     *fd = open("/dev/video0", O_RDWR);
-    printf("open return %d: %s\n", fd, strerror(errno));
-    if(print_caps(fd)) return -1;
-    if(init_mmap(fd, buf)) return -1;
+    printf("open return %d: %s\n", *fd, strerror(errno));
+    if(print_caps(*fd)) return -1;
+    if(init_mmap(*fd, buf)) return -1;
     return 0;
 }
 
