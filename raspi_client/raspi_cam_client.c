@@ -9,6 +9,7 @@
 
 #include <sys/epoll.h>
 #include <sys/types.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/fcntl.h>
 
@@ -16,7 +17,8 @@
 
 #include "v4l2lib.h"
 
-uint8_t *buffer;
+uint8_t *img_buff;
+int     camFd;
 
 #define TIMEOUT        (5)
 
@@ -31,7 +33,8 @@ void handle_func()
     time_t start  = time(NULL);
     time_t end    = start + TIMEOUT;
     time_t current;
-    printf("%d", start);
+
+    // wait to connect to server
     while(1)
     {
         current = time(NULL);
@@ -43,6 +46,41 @@ void handle_func()
         usleep(50000);
     }
     printf("client_init() successfull!\n");
+    
+    // comunication
+    // step 1: send request to server
+    memset(buffer, 0, BUFFER_SIZE);
+    sprintf(buffer, "%s", REQ_CMD);
+    send(socket, &buffer, strlen(buffer), 0);
+    // step 2: recv ack from server
+    memset(buffer, 0, BUFFER_SIZE);
+    recv(socket, buffer, BUFFER_SIZE, 0);
+    recv_cmd(buffer);
+    int bytesused;
+    while(1)
+    {
+        for(;;)
+        {
+            bytesused = capture_image(camFd);
+            // step 3: send image capture to server
+            while (1)
+            {
+                int size = send(socket, &img_buff, BUFFER_SIZE, 0);
+            }
+            
+            // step 4: recv ack for each image from server
+            memset(buffer, 0, BUFFER_SIZE);
+            recv(socket, buffer, BUFFER_SIZE, 0);
+            recv_cmd(buffer);
+
+            
+
+        }
+
+
+    }
+    // step 5: recv response from server
+    // end comunication
     n = read(socket, buffer, BUFFER_SIZE);
     printf("read returned %d: %s\n", n, strerror(errno));
     n = recv_cmd(buffer);
@@ -183,8 +221,11 @@ void pir_thread_func(void)
 
 int main(int argc, char* argv[])
 {
-    
+    if (init_v4l2(&camFd, img_buff) == -1) return 1;
     pir_thread_func();
+
+    free(img_buff);
+    close(camFd);
     return 0;
 }
 

@@ -15,7 +15,7 @@
 #define CL_SUCCESS			(0)
 #define CL_FAILED			(-1)
 
-#define REQ_CMD			    ("GET")
+#define REQ_CMD			    ("HANDLE")
 #define RESP_CMD		    ("OK")
 #define RESP_MOTION_LABEL	("MOTION")
 #define RESP_CODE_OK		(200)
