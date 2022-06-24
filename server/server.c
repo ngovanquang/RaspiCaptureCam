@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
             n = read(connSockFd, buffer, strlen(buffer));
             if (n <= 0){
                 printf("Client closed");
-                close(connSockFd);
+                socket_deinit(&connSockFd);
                 break;
             }
 
@@ -137,15 +137,17 @@ int main(int argc, char *argv[])
             }
         }
 
-        free(buffer);
-
-        socket_deinit(&socket);
+        socket_deinit(&connSockFd);
 
         // step 4: send ack to client
         // step 5: send response to client
 
         // end communication
     }
+
+    free(buffer);
+
+    socket_deinit(&socket);
 
     return 0;
 }
