@@ -17,11 +17,14 @@
 #define CL_FAILED			(-1)
 
 #define REQ_CMD			    ("HANDLE")
+#define SEND_CMD			("SEND")
+#define IMG_SIZE_LABEL		("BYTEUSED")
 #define RESP_CMD		    ("OK")
 #define RESP_MOTION_LABEL	("MOTION")
 #define RESP_CODE_OK		(200)
 #define RESP_CODE_FAILE 	(400)
 #define RESP_CODE_SV_ERROR	(500)
+#define IMGNUM_SEND			(15)
 
 /******************************************************************************
  Local Data type definitions

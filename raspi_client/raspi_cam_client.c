@@ -60,36 +60,56 @@ void handle_func()
     printf("read returned %d [Data: %s]: %s\n", n, buffer,strerror(errno));
     n = recv_cmd(buffer);
     if(n != 200) goto HANDLE_END;
-    // int bytesused;
-    // while(1)
-    // {
-    //     for(;;)
-    //     {
-    //         bytesused = capture_image(camFd);
-    //         // step 3: send image capture to server
+
+    int bytesused;
+    // step 3: send image capture to server
+    while(i < IMGNUM_SEND)
+    {
+        bytesused = capture_image(camFd);
+        int i = 0;
+        // send header
+        memset(buffer, 0, BUFFER_SIZE);
+        sprintf(buffer, "%s %d %s %d", SEND_CMD, i, IMG_SIZE_LABEL);
+        write(socket, buffer, strlen(buffer));
+        // read ack
+        memset(buffer, 0, BUFFER_SIZE);
+        read(socket, buffer, BUFFER_SIZE);
+        n = recv_cmd(buffer);
+        if(n != bytesused) continue;
+        // send img
+        printf("sending img %d\n", i);
+        write(socket, img_buff, (bytesused%BUFFER_SIZE));
+        n = bytesused / BUFFER_SIZE;
+        while(n > 0)
+        {
+            write(socket, img_buff, BUFFER_SIZE);
+            n--;
+        }
+        // step 4: recv ack for each image from server
+        memset(buffer, 0, BUFFER_SIZE);
+        read(socket, buffer, BUFFER_SIZE);
+        n = recv_cmd(buffer);
+        if(n != bytesused) continue;
+
+        i++;
     //         while (1)
     //         {
     //             int size = send(socket, &img_buff, BUFFER_SIZE, 0);
     //         }
             
-    //         // step 4: recv ack for each image from server
     //         memset(buffer, 0, BUFFER_SIZE);
     //         recv(socket, buffer, BUFFER_SIZE, 0);
     //         recv_cmd(buffer);
 
-            
-
-    //     }
-
-
-    // }
-    // step 5: recv response from server
+    }
     // end comunication
+    
     // n = read(socket, buffer, BUFFER_SIZE);
     // printf("read returned %d: %s\n", n, strerror(errno));
     // n = recv_cmd(buffer);
     // printf("n = %d\n", n);
     free(buffer);
+    // step 5: recv response from server
 
     if(CL_FAILED == client_deinit(&socket))
     {
