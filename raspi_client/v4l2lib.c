@@ -27,14 +27,7 @@ static int xioctl(int fd, int request, void *arg)
         return r;
 }
 
-int init_v4l2(int* fd, uint8_t *buf)
-{
-    *fd = open("/dev/video0", O_RDWR);
-    printf("open return %d: %s\n", *fd, strerror(errno));
-    if(print_caps(*fd)) return -1;
-    if(init_mmap(*fd, buf)) return -1;
-    return 0;
-}
+
 
 
 int print_caps(int fd)
@@ -60,39 +53,39 @@ int print_caps(int fd)
                 caps.capabilities);
  
  
-        struct v4l2_cropcap cropcap = {0};
-        cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        if (-1 == xioctl (fd, VIDIOC_CROPCAP, &cropcap))
-        {
-                perror("Querying Cropping Capabilities");
-                return 1;
-        }
+        // struct v4l2_cropcap cropcap = {0};
+        // cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        // if (-1 == xioctl (fd, VIDIOC_CROPCAP, &cropcap))
+        // {
+        //         perror("Querying Cropping Capabilities");
+        //         return 1;
+        // }
  
-        printf( "Camera Cropping:\n"
-                "  Bounds: %dx%d+%d+%d\n"
-                "  Default: %dx%d+%d+%d\n"
-                "  Aspect: %d/%d\n",
-                cropcap.bounds.width, cropcap.bounds.height, cropcap.bounds.left, cropcap.bounds.top,
-                cropcap.defrect.width, cropcap.defrect.height, cropcap.defrect.left, cropcap.defrect.top,
-                cropcap.pixelaspect.numerator, cropcap.pixelaspect.denominator);
+        // printf( "Camera Cropping:\n"
+        //         "  Bounds: %dx%d+%d+%d\n"
+        //         "  Default: %dx%d+%d+%d\n"
+        //         "  Aspect: %d/%d\n",
+        //         cropcap.bounds.width, cropcap.bounds.height, cropcap.bounds.left, cropcap.bounds.top,
+        //         cropcap.defrect.width, cropcap.defrect.height, cropcap.defrect.left, cropcap.defrect.top,
+        //         cropcap.pixelaspect.numerator, cropcap.pixelaspect.denominator);
  
         int support_grbg10 = 0;
  
-        struct v4l2_fmtdesc fmtdesc = {0};
-        fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        // struct v4l2_fmtdesc fmtdesc = {0};
+        // fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         char fourcc[5] = {0};
-        char c, e;
-        printf("  FMT : CE Desc\n--------------------\n");
-        while (0 == xioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc))
-        {
-                strncpy(fourcc, (char *)&fmtdesc.pixelformat, 4);
-                if (fmtdesc.pixelformat == V4L2_PIX_FMT_SGRBG10)
-                    support_grbg10 = 1;
-                c = fmtdesc.flags & 1? 'C' : ' ';
-                e = fmtdesc.flags & 2? 'E' : ' ';
-                printf("  %s: %c%c %s\n", fourcc, c, e, fmtdesc.description);
-                fmtdesc.index++;
-        }
+        // char c, e;
+        // printf("  FMT : CE Desc\n--------------------\n");
+        // while (0 == xioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc))
+        // {
+        //         strncpy(fourcc, (char *)&fmtdesc.pixelformat, 4);
+        //         if (fmtdesc.pixelformat == V4L2_PIX_FMT_SGRBG10)
+        //             support_grbg10 = 1;
+        //         c = fmtdesc.flags & 1? 'C' : ' ';
+        //         e = fmtdesc.flags & 2? 'E' : ' ';
+        //         printf("  %s: %c%c %s\n", fourcc, c, e, fmtdesc.description);
+        //         fmtdesc.index++;
+        // }
         /*
         if (!support_grbg10)
         {
@@ -216,5 +209,14 @@ int capture_image(int fd)
     // free(ouput_file_path);
     // close(img_fd);
 
+    return 0;
+}
+
+int init_v4l2(int fd, uint8_t *buf)
+{
+    fd = open("/dev/video0", O_RDWR);
+    printf("open return %d: %s\n", fd, strerror(errno));
+    if(print_caps(fd)) return -1;
+    if(init_mmap(fd, buf)) return -1;
     return 0;
 }

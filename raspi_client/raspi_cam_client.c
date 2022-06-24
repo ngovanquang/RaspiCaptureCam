@@ -50,41 +50,45 @@ void handle_func()
     // comunication
     // step 1: send request to server
     memset(buffer, 0, BUFFER_SIZE);
-    sprintf(buffer, "%s", REQ_CMD);
-    send(socket, &buffer, strlen(buffer), 0);
+    strcpy(buffer, REQ_CMD);
+    printf("SEND: %s\n", buffer);
+    n = write(socket, buffer, strlen(buffer));
+    printf("write returned %d: %s\n", n, strerror(errno));
     // step 2: recv ack from server
     memset(buffer, 0, BUFFER_SIZE);
-    recv(socket, buffer, BUFFER_SIZE, 0);
-    recv_cmd(buffer);
-    int bytesused;
-    while(1)
-    {
-        for(;;)
-        {
-            bytesused = capture_image(camFd);
-            // step 3: send image capture to server
-            while (1)
-            {
-                int size = send(socket, &img_buff, BUFFER_SIZE, 0);
-            }
+    n = read(socket, buffer, BUFFER_SIZE);
+    printf("read returned %d [Data: %s]: %s\n", n, buffer,strerror(errno));
+    n = recv_cmd(buffer);
+    if(n != 200) goto HANDLE_END;
+    // int bytesused;
+    // while(1)
+    // {
+    //     for(;;)
+    //     {
+    //         bytesused = capture_image(camFd);
+    //         // step 3: send image capture to server
+    //         while (1)
+    //         {
+    //             int size = send(socket, &img_buff, BUFFER_SIZE, 0);
+    //         }
             
-            // step 4: recv ack for each image from server
-            memset(buffer, 0, BUFFER_SIZE);
-            recv(socket, buffer, BUFFER_SIZE, 0);
-            recv_cmd(buffer);
+    //         // step 4: recv ack for each image from server
+    //         memset(buffer, 0, BUFFER_SIZE);
+    //         recv(socket, buffer, BUFFER_SIZE, 0);
+    //         recv_cmd(buffer);
 
             
 
-        }
+    //     }
 
 
-    }
+    // }
     // step 5: recv response from server
     // end comunication
-    n = read(socket, buffer, BUFFER_SIZE);
-    printf("read returned %d: %s\n", n, strerror(errno));
-    n = recv_cmd(buffer);
-    printf("n = %d\n", n);
+    // n = read(socket, buffer, BUFFER_SIZE);
+    // printf("read returned %d: %s\n", n, strerror(errno));
+    // n = recv_cmd(buffer);
+    // printf("n = %d\n", n);
     free(buffer);
 
     if(CL_FAILED == client_deinit(&socket))
@@ -221,7 +225,7 @@ void pir_thread_func(void)
 
 int main(int argc, char* argv[])
 {
-    if (init_v4l2(&camFd, img_buff) == -1) return 1;
+    if (init_v4l2(camFd, img_buff) == -1) return 1;
     pir_thread_func();
 
     free(img_buff);

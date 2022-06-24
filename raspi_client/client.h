@@ -8,9 +8,10 @@
 #define PIR_PIN				(17)
 #define PIR_STATUS_FILE     ("/sys/class/gpio/gpio17/value")
 
-#define SERVER_IP           ("192.168.1.25")
+// #define SERVER_IP           ("192.168.1.25")
+#define SERVER_IP           ("192.168.102.242")
 #define SERVER_PORT 		(9001)
-#define BUFFER_SIZE 		(1500)
+#define BUFFER_SIZE 		(10000)
 #define CONNECTION_TIMEOUT	(180*1000)
 #define CL_SUCCESS			(0)
 #define CL_FAILED			(-1)
