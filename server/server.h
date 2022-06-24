@@ -10,7 +10,7 @@
 #define SV_SUCCESS			(0)
 #define SV_FAILED			(-1)
 
-#define REQ_CMD				("GET")
+#define REQ_CMD				("HANDLE")
 #define RESP_CMD			("OK")
 #define RESP_CODE_OK		(200)
 #define RESP_CODE_FAILE 	(400)
