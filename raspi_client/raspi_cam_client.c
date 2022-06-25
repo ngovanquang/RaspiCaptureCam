@@ -63,11 +63,11 @@ void handle_func()
 
     int bytesused;
     // step 3: send image capture to server
+    int i = 0;
     while(i < IMGNUM_SEND)
     {
         bytesused = capture_image(camFd);
-        int i = 0;
-        // send header
+        // // send header
         memset(buffer, 0, BUFFER_SIZE);
         sprintf(buffer, "%s %d %s %d", SEND_CMD, i, IMG_SIZE_LABEL);
         write(socket, buffer, strlen(buffer));
@@ -76,31 +76,25 @@ void handle_func()
         read(socket, buffer, BUFFER_SIZE);
         n = recv_cmd(buffer);
         if(n != bytesused) continue;
+
         // send img
         printf("sending img %d\n", i);
-        write(socket, img_buff, (bytesused%BUFFER_SIZE));
         n = bytesused / BUFFER_SIZE;
         while(n > 0)
         {
             write(socket, img_buff, BUFFER_SIZE);
+            img_buff += BUFFER_SIZE;
             n--;
         }
-        // step 4: recv ack for each image from server
-        memset(buffer, 0, BUFFER_SIZE);
-        read(socket, buffer, BUFFER_SIZE);
-        n = recv_cmd(buffer);
-        if(n != bytesused) continue;
+        n = bytesused%BUFFER_SIZE;
+        if(n + strlen(DELIMITER) > BUFFER_SIZE) {
+            sprintf(img_buff, "%s%s", img_buff+strlen(DELIMITER), DELIMITER);
+        } else {
+            sprintf(img_buff, "%s%s", img_buff, DELIMITER);
+        }
+            write(socket, img_buff, strlen(img_buff));
 
         i++;
-    //         while (1)
-    //         {
-    //             int size = send(socket, &img_buff, BUFFER_SIZE, 0);
-    //         }
-            
-    //         memset(buffer, 0, BUFFER_SIZE);
-    //         recv(socket, buffer, BUFFER_SIZE, 0);
-    //         recv_cmd(buffer);
-
     }
     // end comunication
     
@@ -108,8 +102,9 @@ void handle_func()
     // printf("read returned %d: %s\n", n, strerror(errno));
     // n = recv_cmd(buffer);
     // printf("n = %d\n", n);
-    free(buffer);
     // step 5: recv response from server
+    
+    free(buffer);
 
     if(CL_FAILED == client_deinit(&socket))
     {
