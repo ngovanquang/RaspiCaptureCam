@@ -57,10 +57,10 @@ int acceptClient(int sock){
     return connSock;
 }
 
-int socket_deinit(int *pSocket)
+int socket_deinit(int socket)
 {
     int n;
-    n = close(*pSocket);
+    n = close(socket);
     printf("[close]\t\treturned %d: %s\n", n, strerror(errno));
     if (n != 0)
         return SV_FAILED;
@@ -71,8 +71,10 @@ int main(int argc, char *argv[])
 {
     int n;
     int socket, connSockFd;
+    char *img_buffer;
     char *buffer, path[BUFFER_SIZE];
     buffer = (char *)calloc(BUFFER_SIZE + 1, 1);
+    img_buffer = (char *) calloc(IMG_BUFFER_LEN, 1);
     memset(path, 0, BUFFER_SIZE);
     int fd;
 
@@ -105,17 +107,22 @@ int main(int argc, char *argv[])
         printf("write returned %d , [data: %s]: %s\n", n, buffer, strerror(errno));
 
         int num = 0;
-        sprintf(path, "/tmp/image%d.jpg", num++);
-        fd = open(path, O_CREAT | O_APPEND | O_WRONLY);
-
+        sprintf(path, "/tmp/imgs/image%d.jpg", num++);
+        fd = open(path, O_CREAT | O_APPEND | O_WRONLY, S_IWUSR);
+        printf("open returned %d: %s\n", fd, strerror(errno));
         // step 3: recv img from client
+        
         while (1) {
-            printf("Recive data");
+            printf("Recive data\n");
             memset(buffer, 0, BUFFER_SIZE);
-            n = read(connSockFd, buffer, strlen(buffer));
+            memset(img_buffer, 0, IMG_BUFFER_LEN);
+
+            // n = read(connSockFd, buffer, strlen(buffer));
+            n = read(connSockFd, buffer, BUFFER_SIZE);
+            printf("read returned: %d: %s\n", n, strerror(errno));
             if (n <= 0){
-                printf("Client closed");
-                socket_deinit(&connSockFd);
+                printf("Client closed\n");
+                socket_deinit(connSockFd);
                 break;
             }
 
@@ -126,10 +133,11 @@ int main(int argc, char *argv[])
                         *token = strtok_r(buffer, DELIMITER, &context);
                 while(token != NULL){
                     write(fd, token, strlen(token));
+                    close(fd);
                     token = strtok_r(NULL, DELIMITER, &context);
                     //Create new file name
-                    sprintf(path, "/tmp/image%d.jpg", num++);
-                    fd = open(path, O_CREAT | O_APPEND | O_WRONLY);
+                    sprintf(path, "/tmp/imgs/image%d.jpg", num++);
+                    fd = open(path, O_CREAT | O_APPEND | O_WRONLY, S_IWUSR);
                 }
             }
             else {
@@ -137,7 +145,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        socket_deinit(&connSockFd);
+        // socket_deinit(connSockFd);
 
         // step 4: send ack to client
         // step 5: send response to client
@@ -147,7 +155,7 @@ int main(int argc, char *argv[])
 
     free(buffer);
 
-    socket_deinit(&socket);
+    socket_deinit(socket);
 
     return 0;
 }
