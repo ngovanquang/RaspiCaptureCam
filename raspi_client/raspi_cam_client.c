@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <linux/videodev2.h>
+#include <sys/mman.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -12,15 +14,225 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/fcntl.h>
+#include <sys/ioctl.h>
 
 #include "client.h"
-
-#include "v4l2lib.h"
 
 uint8_t *img_buff;
 int     camFd;
 
 #define TIMEOUT        (5)
+
+
+
+static int xioctl(int fd, int request, void *arg)
+{
+        int r;
+ 
+        do r = ioctl (fd, request, arg);
+        while (-1 == r && EINTR == errno);
+ 
+        return r;
+}
+
+int print_caps(int fd)
+{
+        struct v4l2_capability caps = {};
+        if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &caps))
+        {
+                perror("Querying Capabilities");
+                return 1;
+        }
+ 
+        printf( "Driver Caps:\n"
+                "  Driver: \"%s\"\n"
+                "  Card: \"%s\"\n"
+                "  Bus: \"%s\"\n"
+                "  Version: %d.%d\n"
+                "  Capabilities: %08x\n",
+                caps.driver,
+                caps.card,
+                caps.bus_info,
+                (caps.version>>16)&&0xff,
+                (caps.version>>24)&&0xff,
+                caps.capabilities);
+ 
+ 
+        // struct v4l2_cropcap cropcap = {0};
+        // cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        // if (-1 == xioctl (fd, VIDIOC_CROPCAP, &cropcap))
+        // {
+        //         perror("Querying Cropping Capabilities");
+        //         return 1;
+        // }
+ 
+        // printf( "Camera Cropping:\n"
+        //         "  Bounds: %dx%d+%d+%d\n"
+        //         "  Default: %dx%d+%d+%d\n"
+        //         "  Aspect: %d/%d\n",
+        //         cropcap.bounds.width, cropcap.bounds.height, cropcap.bounds.left, cropcap.bounds.top,
+        //         cropcap.defrect.width, cropcap.defrect.height, cropcap.defrect.left, cropcap.defrect.top,
+        //         cropcap.pixelaspect.numerator, cropcap.pixelaspect.denominator);
+ 
+        int support_grbg10 = 0;
+ 
+        // struct v4l2_fmtdesc fmtdesc = {0};
+        // fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        char fourcc[5] = {0};
+        // char c, e;
+        // printf("  FMT : CE Desc\n--------------------\n");
+        // while (0 == xioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc))
+        // {
+        //         strncpy(fourcc, (char *)&fmtdesc.pixelformat, 4);
+        //         if (fmtdesc.pixelformat == V4L2_PIX_FMT_SGRBG10)
+        //             support_grbg10 = 1;
+        //         c = fmtdesc.flags & 1? 'C' : ' ';
+        //         e = fmtdesc.flags & 2? 'E' : ' ';
+        //         printf("  %s: %c%c %s\n", fourcc, c, e, fmtdesc.description);
+        //         fmtdesc.index++;
+        // }
+        /*
+        if (!support_grbg10)
+        {
+            printf("Doesn't support GRBG10.\n");
+            return 1;
+        }*/
+ 
+        struct v4l2_format fmt = {0};
+        fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        fmt.fmt.pix.width = 640;
+        fmt.fmt.pix.height = 480;
+        //fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_BGR24;
+        //fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY;
+        fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_JPEG;
+        fmt.fmt.pix.field = V4L2_FIELD_NONE;
+
+        if (-1 == xioctl(fd, VIDIOC_G_FMT, &fmt))
+        {
+            perror("Setting Pixel Format");
+            return 1;
+        }
+        if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
+        {
+            perror("Setting Pixel Format");
+            return 1;
+        }
+ 
+        strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
+        printf( "Selected Camera Mode:\n"
+                "  Width: %d\n"
+                "  Height: %d\n"
+                "  PixFmt: %s\n"
+                "  Field: %d\n",
+                fmt.fmt.pix.width,
+                fmt.fmt.pix.height,
+                fourcc,
+                fmt.fmt.pix.field);
+        return 0;
+}
+ 
+int init_mmap(int fd)
+{
+    struct v4l2_requestbuffers req = {0};
+    req.count = 1;
+    req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    req.memory = V4L2_MEMORY_MMAP;
+ 
+    if (-1 == xioctl(fd, VIDIOC_REQBUFS, &req))
+    {
+        perror("Requesting Buffer");
+        return 1;
+    }
+ 
+    struct v4l2_buffer buf = {0};
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+    buf.index = 0;
+    if(-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf))
+    {
+        perror("Querying Buffer");
+        return 1;
+    }
+ 
+    img_buff = (uint8_t*)mmap (NULL, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
+    //S_BUFFER_LEN = buf.length;
+    printf("Length: %d\nAddress: %p\n", buf.length, img_buff);
+    printf("Image Length: %d\n", buf.bytesused);
+ 
+    return 0;
+}
+ 
+int capture_image(int fd)
+{
+    struct v4l2_buffer buf = {0};
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+    buf.index = 0;
+    if(-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+    {
+        perror("Query Buffer");
+        return 1;
+    }
+ 
+    if(-1 == xioctl(fd, VIDIOC_STREAMON, &buf.type))
+    {
+        perror("Start Capture");
+        return 1;
+    }
+ 
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(fd, &fds);
+    struct timeval tv = {0};
+    tv.tv_sec = 10;
+    int r = select(fd+1, &fds, NULL, NULL, &tv);
+    if(-1 == r)
+    {
+        perror("Waiting for Frame");
+        return 1;
+    }
+ 
+    if(-1 == xioctl(fd, VIDIOC_DQBUF, &buf))
+    {
+        perror("Retrieving Frame");
+        return 1;
+    }
+    printf ("sending image\n");
+    printf("buffer len: %d\n", buf.length);
+    printf("bytes used: %d\n", buf.bytesused);
+    // int i = 0;
+    // int write_len=0;
+    // char* start_buff;
+    // start_buff = (char*)calloc(2, sizeof(int));
+    // memcpy(start_buff, &buf.bytesused, sizeof(int));
+    // write(outfd, start_buff, 2*sizeof(int));
+    // free(start_buff);
+    // while(MTU_SIZE*i <= buf.bytesused)
+    // {
+    //     if((buf.bytesused - MTU_SIZE*i) < MTU_SIZE)
+    //     {
+
+    //         write_len += write(outfd, buffer+MTU_SIZE*i, (buf.bytesused-MTU_SIZE*i));
+    //     }
+    //     else {
+    //         write_len += write(outfd, buffer+MTU_SIZE*i, MTU_SIZE);
+    //     }
+    //     printf("write: %d\n", write_len);
+    //     i++;
+    // }
+    // printf("writen: %d\n", write_len);
+    // char* ouput_file_path;
+    // ouput_file_path = (char*)calloc(20, 1);
+    // i = 0;
+    // sprintf(ouput_file_path, "/tmp/hello%d.png", i);
+    // iVIDIOC_QBUF++;
+    // int img_fd = open(ouput_file_path, O_RDWR|O_CREAT , S_IWUSR|S_IRUSR);
+    // write(img_fd, buffer, buf.bytesused);
+    // free(ouput_file_path);
+    // close(img_fd);
+
+    return buf.bytesused;
+}
 
 
 
@@ -60,29 +272,31 @@ void handle_func()
     printf("read returned %d [Data: %s]: %s\n", n, buffer,strerror(errno));
     n = recv_cmd(buffer);
     if(n != 200) goto HANDLE_END;
-
+    printf("start sending imgs:\n");
     int bytesused;
     // step 3: send image capture to server
     int i = 0;
     while(i < IMGNUM_SEND)
     {
         bytesused = capture_image(camFd);
-        // // send header
-        memset(buffer, 0, BUFFER_SIZE);
-        sprintf(buffer, "%s %d %s %d", SEND_CMD, i, IMG_SIZE_LABEL);
-        write(socket, buffer, strlen(buffer));
+        // // // send header
+        // memset(buffer, 0, BUFFER_SIZE);
+        // sprintf(buffer, "%s %d %s %d", SEND_CMD, i, IMG_SIZE_LABEL);
+        // write(socket, buffer, strlen(buffer));
         // read ack
-        memset(buffer, 0, BUFFER_SIZE);
-        read(socket, buffer, BUFFER_SIZE);
-        n = recv_cmd(buffer);
-        if(n != bytesused) continue;
+        // memset(buffer, 0, BUFFER_SIZE);
+        // read(socket, buffer, BUFFER_SIZE);
+        // n = recv_cmd(buffer);
+        // if(n != bytesused) continue;
 
         // send img
         printf("sending img %d\n", i);
         n = bytesused / BUFFER_SIZE;
+        int temp;
         while(n > 0)
         {
-            write(socket, img_buff, BUFFER_SIZE);
+            temp = write(socket, img_buff, BUFFER_SIZE);
+            printf("write returned %d: %s\n", temp, strerror(errno));
             img_buff += BUFFER_SIZE;
             n--;
         }
@@ -92,7 +306,8 @@ void handle_func()
         } else {
             sprintf(img_buff, "%s%s", img_buff, DELIMITER);
         }
-            write(socket, img_buff, strlen(img_buff));
+            temp = write(socket, img_buff, strlen(img_buff));
+            printf("write returned %d: %s\n", temp, strerror(errno));
 
         i++;
     }
@@ -240,7 +455,12 @@ void pir_thread_func(void)
 
 int main(int argc, char* argv[])
 {
-    if (init_v4l2(camFd, img_buff) == -1) return 1;
+    camFd = open("/dev/video0", O_RDWR);
+    printf("open returned %d: %s\n", camFd, strerror(errno));
+    // if (init_v4l2(camFd, img_buff) == -1) return 1;
+    if(camFd == -1) return 1;
+    if(print_caps(camFd)) return 1;
+    if(init_mmap(camFd)) return 1;
     pir_thread_func();
 
     free(img_buff);
