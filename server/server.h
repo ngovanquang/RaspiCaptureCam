@@ -20,6 +20,8 @@
 #define RESP_CODE_FAILE 	(400)
 #define RESP_CODE_SV_ERROR	(500)
 #define IMGNUM_SEND			(15)
+#define IMG_BUFFER_LEN		(786432)
+
 /******************************************************************************
  Local Data type definitions
  *****************************************************************************/
