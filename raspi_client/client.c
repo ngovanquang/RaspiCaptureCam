@@ -17,7 +17,7 @@ void send_cmd(int socketFd, char* cmd, int param)
     int n;
     char* buff = (char*)calloc(BUFFER_SIZE, 1);
     sprintf(buff, "%s %d", cmd, param); 
-    printf("send command: %d\n", buff);
+    printf("send command: %s\n", buff);
     n = write(socketFd, buff, BUFFER_SIZE);
     printf("write return %d: %s\n", n, strerror(errno));
     free(buff);
