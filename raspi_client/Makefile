@@ -3,8 +3,8 @@ PROJECT = raspi_cam_client
 SRC = raspi_cam_client.c
 
 # LIBS = `pkg-config opencv4 --cflags --libs`
-$(PROJECT) : $(SRC) v4l2lib.o client.o
-	$(CC) $(SRC) client.o v4l2lib.o -o $(PROJECT) $(LIBS)
+$(PROJECT) : $(SRC) client.o
+	$(CC) $(SRC) client.o -o $(PROJECT) $(LIBS)
 
 client.o : client.c client.h
 		$(CC) -c client.c client.h

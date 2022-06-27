@@ -8,8 +8,8 @@
 #define PIR_PIN				(17)
 #define PIR_STATUS_FILE     ("/sys/class/gpio/gpio17/value")
 
-// #define SERVER_IP           ("192.168.1.25")
-#define SERVER_IP           ("192.168.102.242")
+#define SERVER_IP           ("192.168.1.25")
+// #define SERVER_IP           ("192.168.102.242")
 #define SERVER_PORT 		(9001)
 #define BUFFER_SIZE 		(10000)
 #define CONNECTION_TIMEOUT	(180*1000)
@@ -24,7 +24,8 @@
 #define RESP_CODE_OK		(200)
 #define RESP_CODE_FAILE 	(400)
 #define RESP_CODE_SV_ERROR	(500)
-#define IMGNUM_SEND			(15)
+#define IMGNUM_SEND			(1)
+#define DELIMITER			("END\n\n")
 
 /******************************************************************************
  Local Data type definitions
