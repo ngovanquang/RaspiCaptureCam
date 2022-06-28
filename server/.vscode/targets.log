@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2014 Free Software Foundation, Inc.
@@ -8,12 +6,10 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 23 00:31:27 2022
+# Make data base, printed on Sat Jun 25 12:28:19 2022
 
 # Variables
 
-# environment
-VSCODE_GIT_ASKPASS_MAIN = /usr/share/code/resources/app/extensions/git/dist/askpass-main.js
 # 'override' directive
 GNUMAKEFLAGS := 
 # automatic
@@ -32,6 +28,8 @@ XDG_SESSION_TYPE = x11
 VSCODE_LOG_NATIVE = false
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
+# environment
+IM_CONFIG_PHASE = 2
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
@@ -51,15 +49,13 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 # environment
 _ = /usr/bin/code
 # environment
-JOURNAL_STREAM = 9:44674
-# environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-IM_CONFIG_PHASE = 2
+GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
 # environment
 USERNAME = ngoquang
 # environment
@@ -67,11 +63,9 @@ MAKELEVEL := 0
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus,guid=4705fde8d8751814fc4edb8062b31eb8
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
-# environment
-MANAGERPID = 1889
 # environment
 CLUTTER_IM_MODULE = xim
 # environment
@@ -79,17 +73,17 @@ LESSOPEN = | /usr/bin/lesspipe %s
 # environment
 LC_NAME = vi_VN
 # environment
-VSCODE_CWD = /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture
+VSCODE_CWD = /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture/server
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
 PATH = /home/ngoquang/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/jdk/jdk1.8.0_333/bin:/opt/glassfish5/:/opt/ingenic_mips_toolchains/mips-gcc472-glibc216-64bit/bin:/home/ngoquang/.fzf/bin
 # environment
-TERM_PROGRAM_VERSION = 1.68.1
-# environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/ThinkPad-T480:@/tmp/.ICE-unix/1924,unix/ThinkPad-T480:/tmp/.ICE-unix/1924
+GJS_DEBUG_OUTPUT = stderr
+# environment
+SESSION_MANAGER = local/ThinkPad-T480:@/tmp/.ICE-unix/1821,unix/ThinkPad-T480:/tmp/.ICE-unix/1821
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -102,8 +96,6 @@ XDG_MENU_PREFIX = gnome-
 VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
-# environment
-INVOCATION_ID = 9f1fe8d50bfc4d83a023ebb029b3e824
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -112,6 +104,8 @@ LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:
 XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 3780
 # automatic
 %F = $(notdir $%)
 # environment
@@ -125,9 +119,9 @@ PWD = /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture/server
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 2002
+SSH_AGENT_PID = 1899
 # environment
-ORIGINAL_XDG_CURRENT_DESKTOP = Unity
+ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
 GTK_MODULES = gail:atk-bridge
 # environment
@@ -135,7 +129,7 @@ VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /home/ngoquang
 # environment
-LD_LIBRARY_PATH = :/usr/local/lib/:/usr/local/lib/
+LD_LIBRARY_PATH = :/usr/local/lib/
 # environment
 LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
@@ -163,8 +157,6 @@ XDG_VTNR = 2
 # environment
 LC_TIME = vi_VN
 # environment
-VSCODE_GIT_IPC_HANDLE = /run/user/1000/vscode-git-f8aac5ca11.sock
-# environment
 COLORTERM = truecolor
 # default
 MAKE = $(MAKE_COMMAND)
@@ -173,13 +165,13 @@ MAKECMDGOALS := all
 # environment
 QT_IM_MODULE = ibus
 # environment
-SHLVL = 2
+SHLVL = 1
 # makefile (from 'Makefile', line 1)
 CC = "gcc"
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-33f2eae8-ff19-4223-80bf-070fdabdcd99.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-db41082e-43de-4165-be6c-aee6f5b30e85.sock
 # environment
 XDG_SESSION_ID = 2
 # environment
@@ -197,19 +189,13 @@ LC_TELEPHONE = vi_VN
 # default
 MAKE_COMMAND := make
 # environment
-OLDPWD = /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture/raspi_client
-# environment
-VSCODE_GIT_ASKPASS_EXTRA_ARGS = --ms-enable-electron-run-as-node
-# environment
-TERM_PROGRAM = vscode
+OLDPWD = /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture
 # default
 .VARIABLES := 
 # automatic
 *F = $(notdir $*)
 # environment
 VSCODE_IPC_HOOK = /run/user/1000/vscode-b570a5b6-1.68.1-main.sock
-# environment
-VSCODE_GIT_ASKPASS_NODE = /usr/share/code/code
 # makefile
 MAKEFLAGS = pqrR
 # environment
@@ -227,13 +213,9 @@ LC_PAPER = vi_VN
 # environment
 NO_AT_BRIDGE = 1
 # environment
-LC_IDENTIFICATION = vi_VN
-# environment
 QT_ACCESSIBILITY = 1
 # environment
 TEXTDOMAINDIR = /usr/share/locale/
-# environment
-GIT_ASKPASS = /usr/share/code/resources/app/extensions/git/dist/askpass.sh
 # default
 MAKEFILES := 
 # environment
@@ -245,17 +227,15 @@ LC_MEASUREMENT = vi_VN
 # environment
 LC_ALL = C
 # environment
-DBUS_STARTER_BUS_TYPE = session
-# environment
 QT4_IM_MODULE = xim
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/1d9c36c1_910f_4b19_bd37_949e5c69f639
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/d1490bad_fc13_4a4c_a2a0_01ce833aa643
 # automatic
 ^F = $(notdir $^)
 # environment
-GNOME_TERMINAL_SERVICE = :1.97
+GNOME_TERMINAL_SERVICE = :1.88
 # default
 SUFFIXES := 
 # environment
@@ -265,7 +245,7 @@ WINDOWPATH = 2
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
 # environment
-GJS_DEBUG_OUTPUT = stderr
+LC_IDENTIFICATION = vi_VN
 # default
 .RECIPEPREFIX := 
 # environment
@@ -275,20 +255,17 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 4163
-# environment
-DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=4705fde8d8751814fc4edb8062b31eb8
+VSCODE_PID = 3780
 # variable set hash-table stats:
-# Load=133/1024=13%, Rehash=0, Collisions=23/160=14%
+# Load=123/1024=12%, Rehash=0, Collisions=22/150=15%
 
 # Pattern-specific Variable Values
 
- 
 # No pattern-specific variable values.
 
 # Directories
 
-# . (device 66309, inode 4038825): 7 files, no impossibilities.
+# . (device 66309, inode 4333073): 7 files, no impossibilities.
 
 # 7 files, no impossibilities in 1 directories.
 
@@ -308,7 +285,10 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-20 23:52:15.385268051
+ 
+make: *** No rule to make target 'all'.  Stop.
+
+#  Last modified 2022-06-23 22:46:09.992115166
 #  File has been updated.
 #  Successfully updated.
 
@@ -358,6 +338,6 @@ server.h:
 # strcache performance: lookups = 22 / hit rate = 40%
 # hash-table stats:
 # Load=13/8192=0%, Rehash=0, Collisions=1/22=5%
-# Finished Make data base on Thu Jun 23 00:31:27 2022
+# Finished Make data base on Sat Jun 25 12:28:19 2022
 
  

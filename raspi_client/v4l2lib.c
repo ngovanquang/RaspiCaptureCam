@@ -29,7 +29,6 @@ static int xioctl(int fd, int request, void *arg)
 
 
 
-
 int print_caps(int fd)
 {
         struct v4l2_capability caps = {};
@@ -95,13 +94,18 @@ int print_caps(int fd)
  
         struct v4l2_format fmt = {0};
         fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        fmt.fmt.pix.width = 1280;
-        fmt.fmt.pix.height = 960;
+        fmt.fmt.pix.width = 640;
+        fmt.fmt.pix.height = 480;
         //fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_BGR24;
         //fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_GREY;
-        fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
+        fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_JPEG;
         fmt.fmt.pix.field = V4L2_FIELD_NONE;
-        
+
+        if (-1 == xioctl(fd, VIDIOC_G_FMT, &fmt))
+        {
+            perror("Setting Pixel Format");
+            return 1;
+        }
         if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
         {
             perror("Setting Pixel Format");
@@ -120,8 +124,8 @@ int print_caps(int fd)
                 fmt.fmt.pix.field);
         return 0;
 }
- 
-int init_mmap(int fd, uint8_t *buffer)
+
+int init_mmap(int fd, uint8_t* buffer)
 {
     struct v4l2_requestbuffers req = {0};
     req.count = 1;
@@ -151,10 +155,9 @@ int init_mmap(int fd, uint8_t *buffer)
  
     return 0;
 }
- 
-static int i = 0;
+  
 
-int capture_image(int fd)
+int capture_image(int fd, int outfd)
 {
     struct v4l2_buffer buf = {0};
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -194,16 +197,30 @@ int capture_image(int fd)
     printf("bytes used: %d\n", buf.bytesused);
     // int i = 0;
     // int write_len=0;
+    // char* start_buff;
+    // start_buff = (char*)calloc(2, sizeof(int));
+    // memcpy(start_buff, &buf.bytesused, sizeof(int));
+    // write(outfd, start_buff, 2*sizeof(int));
+    // free(start_buff);
     // while(MTU_SIZE*i <= buf.bytesused)
     // {
-    //     write_len += write(outfd, buffer+MTU_SIZE*i, MTU_SIZE);
+    //     if((buf.bytesused - MTU_SIZE*i) < MTU_SIZE)
+    //     {
+
+    //         write_len += write(outfd, buffer+MTU_SIZE*i, (buf.bytesused-MTU_SIZE*i));
+    //     }
+    //     else {
+    //         write_len += write(outfd, buffer+MTU_SIZE*i, MTU_SIZE);
+    //     }
+    //     printf("write: %d\n", write_len);
     //     i++;
     // }
     // printf("writen: %d\n", write_len);
     // char* ouput_file_path;
     // ouput_file_path = (char*)calloc(20, 1);
+    // i = 0;
     // sprintf(ouput_file_path, "/tmp/hello%d.png", i);
-    // i++;
+    // iVIDIOC_QBUF++;
     // int img_fd = open(ouput_file_path, O_RDWR|O_CREAT , S_IWUSR|S_IRUSR);
     // write(img_fd, buffer, buf.bytesused);
     // free(ouput_file_path);
@@ -211,6 +228,7 @@ int capture_image(int fd)
 
     return 0;
 }
+ 
 
 int init_v4l2(int fd, uint8_t *buf)
 {

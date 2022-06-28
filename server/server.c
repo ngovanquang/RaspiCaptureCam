@@ -40,10 +40,17 @@ int socket_init(int *pSocket)
         return SV_FAILED;
 
     *pSocket = sockFd;
+<<<<<<< HEAD
 
     return SV_SUCCESS;
 }
 
+=======
+
+    return SV_SUCCESS;
+}
+
+>>>>>>> client-n
 // Accept connection
 int acceptClient(int sock){
     int connSock;
@@ -77,6 +84,15 @@ int main(int argc, char *argv[])
     img_buffer = (char *) calloc(IMG_BUFFER_LEN, 1);
     memset(path, 0, BUFFER_SIZE);
     int fd;
+<<<<<<< HEAD
+=======
+    char* send_cmd;
+    char* img_size_label; 
+    send_cmd = (char*)calloc(strlen(SEND_CMD), 1);
+    img_size_label = (char*)calloc(strlen(IMG_SIZE_LABEL), 1);
+    int byteused, imgnum;
+
+>>>>>>> client-n
 
     socket_init(&socket);
 
@@ -84,6 +100,7 @@ int main(int argc, char *argv[])
     // write(socket, buffer, BUFFER_SIZE);
 
     // communication
+<<<<<<< HEAD
     // step 1: recv request from client
 
     while (1)
@@ -91,32 +108,59 @@ int main(int argc, char *argv[])
         connSockFd = acceptClient(socket);
         while (1)
         {
+=======
+
+    int temp = 0;
+WAIT_NEWCONNECTION:
+    while (1)
+    {
+        connSockFd = acceptClient(socket);
+
+        /* Step 1: server receive resquest from client 
+            if receive message: HANDLE --> goto step 2
+            else loop
+        */
+        do {
+>>>>>>> client-n
             memset(buffer, 0, BUFFER_SIZE);
             n = read(connSockFd, buffer, strlen(REQ_CMD));
             printf("read returned %d , [data: %s]: %s\n", n, buffer, strerror(errno));
             n = strcmp(buffer, REQ_CMD);
             printf("strcmp returned %d: %s\n", n, strerror(errno));
+<<<<<<< HEAD
             if (n >= 0)
                 break;
         }
 
         // step 2: send ack to client
+=======
+
+        } while(n != 0);
+
+        /* step 2: send ack(OK 200) to client */
+>>>>>>> client-n
         memset(buffer, 0, BUFFER_SIZE);
         sprintf(buffer, "%s %d", RESP_CMD, RESP_CODE_OK);
         write(connSockFd, buffer, strlen(buffer));
         printf("write returned %d , [data: %s]: %s\n", n, buffer, strerror(errno));
 
+<<<<<<< HEAD
         int num = 0;
         sprintf(path, "/tmp/imgs/image%d.jpg", num++);
         fd = open(path, O_CREAT | O_APPEND | O_WRONLY, S_IWUSR);
         printf("open returned %d: %s\n", fd, strerror(errno));
         // step 3: recv img from client
         
+=======
+        /* step 3: recv img from client */
+
+>>>>>>> client-n
         while (1) {
             printf("Recive data\n");
             memset(buffer, 0, BUFFER_SIZE);
             memset(img_buffer, 0, IMG_BUFFER_LEN);
 
+<<<<<<< HEAD
             // n = read(connSockFd, buffer, strlen(buffer));
             n = read(connSockFd, buffer, BUFFER_SIZE);
             printf("read returned: %d: %s\n", n, strerror(errno));
@@ -153,6 +197,87 @@ int main(int argc, char *argv[])
         // end communication
     }
 
+=======
+            // server receive message (SEND filenum BUFFUSED imgsize) from client and send ack to client
+            while(1)
+            {
+                memset(buffer, 0, BUFFER_SIZE);
+                n = read(connSockFd, buffer, BUFFER_SIZE);
+                printf("read returned: %d: %s\n", n, strerror(errno));
+
+                printf("BUFFER: %s\n", buffer);
+                sscanf(buffer, "%s %d %s %d", send_cmd, &imgnum, img_size_label, &byteused);
+                // if  
+                if(strcmp(send_cmd, SEND_CMD) != 0 || strcmp(img_size_label, IMG_SIZE_LABEL) != 0)
+                {
+                    memset(buffer, 0, BUFFER_SIZE);
+                    sprintf(buffer, "%s %d", RESP_CMD, RESP_CODE_FAILE);
+                    n = write(connSockFd, buffer, strlen(buffer));
+                    printf("write response returned: %d: %s\n", n, strerror(errno));
+
+                } else {
+                    // deinit connection sock when byteused = -1 vs imgnum = -1
+                    if(byteused == -1 && imgnum == -1) {
+                        socket_deinit(connSockFd);
+                        goto WAIT_NEWCONNECTION;
+                    }
+                    memset(buffer, 0, BUFFER_SIZE);
+                    sprintf(buffer, "%s %d", RESP_CMD, RESP_CODE_OK);
+                    n = write(connSockFd, buffer, strlen(buffer));
+                    printf("write response returned: %d: %s\n", n, strerror(errno));
+
+                    sprintf(path, "/home/ngoquang/Desktop/demo/hello%d.jpg", imgnum);
+                    fd = open(path, O_CREAT | O_RDWR, S_IRWXU|S_IRWXG|S_IRWXO);
+                    printf("open returned %d: %s\n", fd, strerror(errno));
+                    break;
+                }
+
+            }
+
+            // write img to file
+            // vs byteused > BUFFER_SIZE
+            while(byteused > BUFFER_SIZE) {
+                n = read(connSockFd, buffer, BUFFER_SIZE);
+                temp += n;
+                printf("read returned: [%d : %d]: %s\n", n, temp, strerror(errno));
+                memcpy(img_buffer, buffer, n);
+                img_buffer += n;
+                byteused -= n;
+            }
+            // vs byteused < BUFFER_SIZE
+            do {
+                n = read(connSockFd, buffer, byteused);
+                temp += n;
+                printf("read returned: [%d : %d]: %s\n", n, temp, strerror(errno));
+                memcpy(img_buffer, buffer, n);
+                img_buffer += n;
+                byteused -= n;
+            } while(byteused != 0);
+
+            img_buffer -= temp;
+            n = write(fd, img_buffer, temp);
+            printf("write file %d returned: %d: %s\n", imgnum, n, strerror(errno));
+            n = close(fd);
+            printf("close file %d returned: %d: %s\n",imgnum, n, strerror(errno));
+            temp = 0;
+
+            memset(buffer, 0, BUFFER_SIZE);
+            sprintf(buffer, "%s %d", RESP_CMD, RESP_CODE_OK);
+            n = write(connSockFd, buffer, strlen(buffer));
+            printf("write response returned: %d: %s\n", n, strerror(errno));
+            //socket_deinit(connSockFd);
+
+            // step 4: send ack to client
+            // step 5: send response to client
+
+            // end communication
+        }
+    }
+
+    free(img_buffer);
+    free(img_size_label);
+    free(send_cmd);
+>>>>>>> client-n
     free(buffer);
 
     socket_deinit(socket);

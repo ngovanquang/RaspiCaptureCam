@@ -34,18 +34,11 @@ int recv_cmd(char* buff)
     n = sscanf(buff, "%s %d %s %d", cm1, &status_code, cm2, &motion_type);
     printf("%s\n%d\n%s\n%d\n", cm1, status_code, cm2, motion_type);
 
-    if (status_code != RESP_CODE_OK)
-    {
-        if(status_code == INT_MIN) n = CL_FAILED;
-        n = status_code;
-    } else {
-        if(strcmp(cm2, RESP_MOTION_LABEL) < 0)
-        {
-            n = CL_FAILED;
-        }
-        n = motion_type;
+    if(strcmp(cm1, RESP_CMD) == 0){
+        if(strcmp(cm2, RESP_MOTION_LABEL) == 0) return motion_type;
+        else return status_code;
     }
-    
+
     free(cm1);
     free(cm2);
     free(buff);
