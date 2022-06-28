@@ -2,6 +2,5 @@ make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture'
 make: Leaving directory '/home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture'
  
-make: *** No rule to make target 'capturev4l2.c', needed by 'capturev4l2'.
-make: *** No rule to make target 'client.c', needed by 'client'.
+make: *** No targets specified and no makefile found.  Stop.
 

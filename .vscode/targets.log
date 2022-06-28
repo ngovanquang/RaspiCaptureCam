@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun 17 12:26:34 2022
+# Make data base, printed on Mon Jun 27 02:24:55 2022
 
 # Variables
 
@@ -22,14 +22,14 @@ GNUMAKEFLAGS :=
 DESKTOP_SESSION = ubuntu
 # default
 .SHELLFLAGS := -c
-# makefile (from 'Makefile', line 3)
-SRC = capturev4l2.c
 # environment
 XDG_SESSION_TYPE = x11
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
+# environment
+IM_CONFIG_PHASE = 2
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
@@ -43,19 +43,17 @@ CURDIR := /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture
 # makefile
 SHELL = /bin/sh
 # environment
-VTE_VERSION = 5202
-# environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 9:46921
+_ = /usr/share/code/code
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
-# makefile (from 'Makefile', line 1)
-MAKEFILE_LIST :=  Makefile
+# makefile
+MAKEFILE_LIST := 
 # automatic
 @F = $(notdir $@)
 # environment
-IM_CONFIG_PHASE = 2
+GIO_LAUNCHED_DESKTOP_FILE = /usr/share/applications/code.desktop
 # environment
 USERNAME = ngoquang
 # environment
@@ -63,13 +61,9 @@ MAKELEVEL := 0
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus,guid=93d99ee069680560e04088a462abd262
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
-# environment
-_ = /usr/bin/code
-# environment
-MANAGERPID = 2621
 # environment
 CLUTTER_IM_MODULE = xim
 # environment
@@ -77,37 +71,37 @@ LESSOPEN = | /usr/bin/lesspipe %s
 # environment
 LC_NAME = vi_VN
 # environment
-VSCODE_CWD = /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture
+VSCODE_CWD = /home/ngoquang
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/ngoquang/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/jdk/jdk1.8.0_333/bin:/opt/glassfish5/:/opt/ingenic_mips_toolchains/mips-gcc472-glibc216-64bit/bin:/home/ngoquang/.fzf/bin
+PATH = /home/ngoquang/.local/bin:/home/ngoquang/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/jdk/jdk1.8.0_333/bin:/opt/glassfish5/:/opt/ingenic_mips_toolchains/mips-gcc472-glibc216-64bit/bin:/home/ngoquang/.fzf/bin
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/ThinkPad-T480:@/tmp/.ICE-unix/2656,unix/ThinkPad-T480:/tmp/.ICE-unix/2656
+GJS_DEBUG_OUTPUT = stderr
+# environment
+SESSION_MANAGER = local/ThinkPad-T480:@/tmp/.ICE-unix/1981,unix/ThinkPad-T480:/tmp/.ICE-unix/1981
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
 TEXTDOMAIN = im-config
-# makefile (from 'Makefile', line 2)
-PROJECT = capturev4l2
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
 VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
-# environment
-INVOCATION_ID = e14d6198ae3940838215fc33169910a3
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
-LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+LS_COLORS = 
 # environment
 XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2831
 # automatic
 %F = $(notdir $%)
 # environment
@@ -121,7 +115,7 @@ PWD = /home/ngoquang/Desktop/workplaces/Learn_CV/cam_capture
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 2734
+SSH_AGENT_PID = 2059
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -135,17 +129,13 @@ LD_LIBRARY_PATH = :/usr/local/lib/
 # environment
 LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
-VSCODE_CLI = 1
-# environment
-VSCODE_CODE_CACHE_PATH = /home/ngoquang/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = /home/ngoquang/.config/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
 # environment
 LOGNAME = ngoquang
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # automatic
 +F = $(notdir $+)
-# environment
-ELECTRON_NO_ATTACH_CONSOLE = 1
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -158,8 +148,6 @@ GNOME_DESKTOP_SESSION_ID = this-is-deprecated
 XDG_VTNR = 2
 # environment
 LC_TIME = vi_VN
-# environment
-COLORTERM = truecolor
 # default
 MAKE = $(MAKE_COMMAND)
 # default
@@ -168,12 +156,10 @@ MAKECMDGOALS := all
 QT_IM_MODULE = ibus
 # environment
 SHLVL = 1
-# makefile (from 'Makefile', line 1)
-CC = "gcc"
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-fc53977a-00d2-4c69-946d-b9a093ddaec9.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-127061af-3cc7-40fe-9a91-0cb22c1a6741.sock
 # environment
 XDG_SESSION_ID = 2
 # environment
@@ -181,7 +167,7 @@ USER = ngoquang
 # environment
 LC_MONETARY = vi_VN
 # makefile
-.DEFAULT_GOAL := capturev4l2
+.DEFAULT_GOAL := 
 # environment
 XDG_CURRENT_DESKTOP = Unity
 # automatic
@@ -195,21 +181,21 @@ MAKE_COMMAND := make
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-b570a5b6-1.67.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-b570a5b6-1.68.1-main.sock
 # makefile
 MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
+# environment
+PT8HOME = /opt/pt
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
 GDK_BACKEND = x11
 # environment
 LC_PAPER = vi_VN
-# environment
-NO_AT_BRIDGE = 1
 # environment
 QT_ACCESSIBILITY = 1
 # environment
@@ -225,15 +211,11 @@ LC_MEASUREMENT = vi_VN
 # environment
 LC_ALL = C
 # environment
-DBUS_STARTER_BUS_TYPE = session
-# environment
 QT4_IM_MODULE = xim
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/74aad371_ffda_4bba_85cf_e6b947ef56e4
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # automatic
 ^F = $(notdir $^)
-# environment
-GNOME_TERMINAL_SERVICE = :1.2174
 # default
 SUFFIXES := 
 # environment
@@ -251,13 +233,9 @@ LC_ADDRESS = vi_VN
 # environment
 LANG = C
 # environment
-TERM = xterm-256color
-# environment
-VSCODE_PID = 26633
-# environment
-DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=93d99ee069680560e04088a462abd262
+VSCODE_PID = 2831
 # variable set hash-table stats:
-# Load=122/1024=12%, Rehash=0, Collisions=20/149=13%
+# Load=111/1024=11%, Rehash=0, Collisions=19/133=14%
 
 # Pattern-specific Variable Values
 
@@ -265,9 +243,9 @@ DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=93d99ee069680560e04088a
 
 # Directories
 
-# . (device 66309, inode 3949007): 4 files, no impossibilities.
+# . (device 66309, inode 3949007): 8 files, no impossibilities.
 
-# 4 files, no impossibilities in 1 directories.
+# 8 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -282,33 +260,19 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
-client: client.c
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
- 
-#  recipe to execute (from 'Makefile', line 10):
-	$(CC) client.c -o client
-
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-05 00:32:43.077149
+#  File does not exist.
 #  File has been updated.
-#  Successfully updated.
-
-capturev4l2: capturev4l2.c client
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 7):
-	$(CC) $(SRC) -o $(PROJECT) $(LIBS)
+#  Failed to be updated.
 
 # Not a target:
-client.c:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
 
 # Not a target:
 .DEFAULT:
@@ -316,35 +280,28 @@ client.c:
 #  Modification time never checked.
 #  File has not been updated.
 
-clean:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 12):
-	rm -rf $(PROJECT)
-	rm -rf hello.png client
-	rm -rf /home/ngoquang/Desktop/workplaces/Learn_CV/demo/hello.png
-
+ 
 # Not a target:
-capturev4l2.c:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+GNUmakefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
 
 # files hash-table stats:
-# Load=9/1024=1%, Rehash=0, Collisions=0/23=0%
+# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 14 / storage = 125 B / avg = 8 B
-# current buf: size = 8162 B / used = 125 B / count = 14 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 16 / storage = 144 B / avg = 9 B
+# current buf: size = 8162 B / used = 144 B / count = 16 / avg = 9 B
 
-# strcache performance: lookups = 22 / hit rate = 36%
+# strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
-# Load=14/8192=0%, Rehash=0, Collisions=1/22=5%
-# Finished Make data base on Fri Jun 17 12:26:34 2022
+# Load=16/8192=0%, Rehash=0, Collisions=1/19=5%
+# Finished Make data base on Mon Jun 27 02:24:55 2022
 
  
