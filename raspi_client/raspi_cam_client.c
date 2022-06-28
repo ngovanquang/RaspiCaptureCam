@@ -279,40 +279,56 @@ void handle_func()
     while(i < IMGNUM_SEND)
     {
         bytesused = capture_image(camFd);
-        // // // send header
-        // memset(buffer, 0, BUFFER_SIZE);
-        // sprintf(buffer, "%s %d %s %d", SEND_CMD, i, IMG_SIZE_LABEL);
-        // write(socket, buffer, strlen(buffer));
-        // read ack
-        // memset(buffer, 0, BUFFER_SIZE);
-        // read(socket, buffer, BUFFER_SIZE);
-        // n = recv_cmd(buffer);
-        // if(n != bytesused) continue;
+        usleep(400000);
+
+        while(1)
+        {
+            // send header
+            memset(buffer, 0, BUFFER_SIZE);
+            sprintf(buffer, "%s %d %s %d", SEND_CMD, i, IMG_SIZE_LABEL, bytesused);
+            printf("LENGTH: %d\n", strlen(buffer));
+            write(socket, buffer, strlen(buffer));
+            // read ack
+            memset(buffer, 0, BUFFER_SIZE);
+            read(socket, buffer, BUFFER_SIZE);
+            n = recv_cmd(buffer);
+            if(n == 200) break;
+        }
+        
 
         // send img
         printf("sending img %d\n", i);
-        n = bytesused / BUFFER_SIZE;
-        int temp;
-        while(n > 0)
-        {
-            temp = write(socket, img_buff, BUFFER_SIZE);
-            printf("write returned %d: %s\n", temp, strerror(errno));
-            img_buff += BUFFER_SIZE;
-            n--;
-        }
-        n = bytesused%BUFFER_SIZE;
-        if(n + strlen(DELIMITER) > BUFFER_SIZE) {
-            sprintf(img_buff, "%s%s", img_buff+strlen(DELIMITER), DELIMITER);
-        } else {
-            sprintf(img_buff, "%s%s", img_buff, DELIMITER);
-        }
-            temp = write(socket, img_buff, strlen(img_buff));
-            printf("write returned %d: %s\n", temp, strerror(errno));
 
+        n = bytesused / BUFFER_SIZE;
+        int temp = 0;
+
+        // send img
+        while(bytesused > BUFFER_SIZE) {
+            n = write(socket, img_buff+temp*BUFFER_SIZE, BUFFER_SIZE);
+            temp++;
+            printf("write returned: [%d : %d]: %s\n", n, temp*BUFFER_SIZE, strerror(errno));
+            bytesused -= n;
+            printf("BYTESUSED: %d\n", bytesused);
+        }
+            n = write(socket, img_buff+temp*BUFFER_SIZE, bytesused);
+            printf("write returned: [%d : %d]: %s\n", n, temp*BUFFER_SIZE+bytesused, strerror(errno));
+            bytesused -= n;
+
+            usleep(20000);
+            memset(buffer, 0, BUFFER_SIZE);
+            n = read(socket, buffer, 200);
+            printf("read returned: %d: %s\n", n, strerror(errno));
+            if(200 != recv_cmd(buffer)) continue;
         i++;
     }
+
     // end comunication
     
+    // send header the last img was send
+    memset(buffer, 0, BUFFER_SIZE);
+    sprintf(buffer, "%s %d %s %d", SEND_CMD, -1, IMG_SIZE_LABEL, -1);
+    printf("LENGTH: %d\n", strlen(buffer));
+    write(socket, buffer, strlen(buffer));
     // n = read(socket, buffer, BUFFER_SIZE);
     // printf("read returned %d: %s\n", n, strerror(errno));
     // n = recv_cmd(buffer);
