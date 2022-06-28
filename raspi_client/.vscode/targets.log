@@ -302,6 +302,7 @@ client.o: client.c client.h
 
 # Not a target:
 v4l2lib.c:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
