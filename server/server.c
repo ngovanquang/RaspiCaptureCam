@@ -67,13 +67,22 @@ int socket_deinit(int *pSocket)
     return SV_SUCCESS;
 }
 
+int createFile(char *path, int offset, int fpos){
+    int fd;
+    memset(path, 0, sizeof(path));
+    sprintf(path, "/tmp/act%d", fpos++);
+    mkdir(path, 777);
+    sprintf(path, "/image%d.jpg", offset++);
+    fd = open(path, O_CREAT | O_APPEND | O_WRONLY);
+    return fd;
+}
+
 int main(int argc, char *argv[])
 {
     int n, numClient = 0;
     int socket, connSockFd;
     char *buffer, path[BUFFER_SIZE];
     buffer = (char *)calloc(BUFFER_SIZE + 1, 1);
-    memset(path, 0, BUFFER_SIZE);
     int fd;
 
     socket_init(&socket);
@@ -105,10 +114,7 @@ int main(int argc, char *argv[])
         printf("write returned %d , [data: %s]: %s\n", n, buffer, strerror(errno));
 
         int num = 0;
-        sprintf(path, "/tmp/act%d", numClient++);
-        mkdir(path, 777);
-        sprintf(path, "/image%d.jpg", num++);
-        fd = open(path, O_CREAT | O_APPEND | O_WRONLY);
+        fd = createFile(path, num, numClient);
 
         // step 3: recv img from client
         while (1) {
@@ -132,11 +138,7 @@ int main(int argc, char *argv[])
                     close(fd);
                     token = strtok_r(NULL, DELIMITER, &context);
                     //Create new file name
-                    memset(path, 0, BUFFER_SIZE);
-                    sprintf(path, "/tmp/act%d", numClient++);
-                    mkdir(path, 777);
-                    sprintf(path, "/image%d.jpg", num++);
-                    fd = open(path, O_CREAT | O_APPEND | O_WRONLY);
+                    fd = createFile(path, num, numClient);
                 }
             }
             else {
