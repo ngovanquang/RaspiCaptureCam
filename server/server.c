@@ -126,8 +126,10 @@ int main(int argc, char *argv[])
                         *token = strtok_r(buffer, DELIMITER, &context);
                 while(token != NULL){
                     write(fd, token, strlen(token));
+                    close(fd);
                     token = strtok_r(NULL, DELIMITER, &context);
                     //Create new file name
+                    memset(path, 0, BUFFER_SIZE);
                     sprintf(path, "/tmp/image%d.jpg", num++);
                     fd = open(path, O_CREAT | O_APPEND | O_WRONLY);
                 }
